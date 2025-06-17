@@ -161,42 +161,45 @@ return left + right;
 };
 
 
-ll gcd(ll a, ll b)
-{
-if (a == 0)
-return b;
-return gcd(b % a, a);
-}
-ll findGCD(ll arr[], ll n)
-{
-ll result = arr[0];
-for (int i = 1; i < n; i++)
-{
-result = gcd(arr[i], result);
-
-if(result == 1)
-{
-return 1;
- }
-}
- return result;
+class BIT{
+public:
+vector<int> bit;
+BIT(int n) {
+bit.resize(n+1,0);
 }
 
- ll bs(vector<ll> &v , ll &key){
-ll lo=0,hi=v.size()-1;
-while(hi-lo>1){
-ll mid=(hi+lo)/2;
-if (v[mid]<key){
-lo=mid+1;
-}
-else {
-hi=mid;
+void update(int id, int x){
+int sz = bit.size();
+for(int i= id; i<sz; i += (i &(-i))) {
+bit[i] += x;
 }
 }
-if (v[lo]==key) return lo;
-else if (v[hi]==key) return hi;
- else return -1;
+
+ll get_sum (int id) {
+ll res=0; int sz = bit.size();
+for (int i=id;i>0;i-= (i&(-i))){
+res += bit[i];
 }
+return res;
+}
+};
+
+
+ll gcd(ll a, ll b,ll &x,ll &y)
+{
+if (b == 0)
+{
+x = 1;
+y=0;
+return a;
+}
+ll x1,y1;
+ll d = gcd(b,a%b,x1,y1);
+x = y1;
+y = x1 - y1*(a/b);
+return d;
+}
+
 
 ll binexpo(ll a,ll b){
 ll ans=1;
@@ -211,46 +214,39 @@ return ans;
 }
 
 
-const int N=1e5+1;
-vector <int> graph[N];
-bool vis[N];
+const int N = 1e5+1;
+ll fact[N];
 
 
-void dfs(int vertex){   // O(V+E) -> complexity
 
- 
-vis[vertex]=true;
+ll ncr(ll n, ll r) {
+ll num = fact[n];
+ll den = fact[r]*1LL*fact[n-r];
+den%=M;
 
-for(int child : graph[vertex]){
-
-if (vis[child]) continue;
-
- dfs(child);
-
- }
-
- }
+return (num*1LL*binexpo(den,M-2))%M;
+}
 
 
 
 
 
 
-  void solve(){
-   ll n;
-   cin>>n;
+    void solve(){
+     ll n;
+     cin>>n;
 
 
-   vector<ll> v(n);
-   for (int i=0;i<n;i++){ 
-     cin>>v[i]; 
-   } 
+     vector<ll> v(n);
+     for (int i=0;i<n;i++){ 
+         cin>>v[i]; 
+     } 
 
 
-  
+    
 
 
-  }
+    }
 
 
 
@@ -262,12 +258,12 @@ if (vis[child]) continue;
 ios_base::sync_with_stdio(false);
 cin.tie(NULL);
 cout.tie(NULL);
-   ll t;
-   cin>>t;
-   while (t--){
+     ll t;
+     cin>>t;
+     while (t--){
 solve();
  
-   } 
+     } 
 
      return 0;
 }
